@@ -1,6 +1,6 @@
 var _ = require('underscore');
 
-exports.route = function(app, db) {
+exports.route = function(app, db, hashFunction) {
   app.post('/register', function(req, res) {
 
 
@@ -19,6 +19,7 @@ exports.route = function(app, db) {
               console.log("User not saved, already exists");
               res.send(500);
       } else {
+          user.password = hashFunction(user.password);
           db.users.save(user, function(err, saved) {
             if( err || !saved ) {
               console.log("User not saved");
@@ -56,7 +57,7 @@ function validate (req) {
       return false;
     }
     return true;
-}
+};
 
 function validateName(name, req) {
     req.assert(name, name + ' is required').notEmpty();

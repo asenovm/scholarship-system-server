@@ -1,4 +1,4 @@
-exports.route = function(app, db, passport, LocalStrategy) {
+exports.route = function(app, db, passport, LocalStrategy, hashFunction) {
   passport.serializeUser(function(user, done) {
     done(null, user._id);
   });
@@ -11,6 +11,8 @@ exports.route = function(app, db, passport, LocalStrategy) {
 
   passport.use(new LocalStrategy(
 	  function(username, password, done) {
+      console.log(password);
+      password = hashFunction(password);
       db.users.findOne({email: username, password: password}, function(err, user) {
         if(err) {
           return done(err);
