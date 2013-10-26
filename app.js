@@ -1,7 +1,7 @@
 var express = require('express');
 var mongojs = require('mongojs');
-var passport = require('passport');
 var crypto = require('crypto-js/md5');
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var expressValidator = require('express-validator'); 
 
@@ -63,9 +63,7 @@ passport.use(new LocalStrategy(
 ));
 
 app.post('/login', passport.authenticate('local'), function(req, res) {
-  0
   res.send(req.user);
-  
 });
 
 app.post('/register', function(req, res) {
@@ -85,6 +83,7 @@ app.post('/register', function(req, res) {
   var errors = req.validationErrors();  
     if(errors){
       console.log("Validation parameters fail");
+      console.log(errors);
       res.send(500);
       return;
     }
@@ -99,7 +98,7 @@ app.post('/register', function(req, res) {
       res.send(500);
     }
     else{
-      
+
       console.log("User saved");
       res.send(200);    
     } 
