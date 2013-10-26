@@ -7,6 +7,15 @@ var expressValidator = require('express-validator');
 var registration = require('./services/register'); 
 var login = require('./services/login'); 
 
+// expressValidator.Validator.prototype.isEmail = function(email) {
+//   //You could validate against this.str, instead of just erroring out.
+//   console.log('=======================');
+//   console.log('log from isEmail: ' + email);
+//   console.log('log from this: ' + this.email);
+
+//   console.log('=======================');
+//   return this;
+// }
 
 var databaseURL = '192.168.0.103:27017/scholar-systems';
 var collections = ['users'];
@@ -20,7 +29,6 @@ app.configure(function() {
   app.use(express.session({ secret: 'keyboard cat' }));
   app.use(passport.initialize());
   app.use(passport.session());
-  // app.use(expressValidator);
   app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
