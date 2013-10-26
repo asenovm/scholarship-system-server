@@ -1,21 +1,7 @@
 var _ = require('underscore');
 
-exports.route = function(app, db, expressValidator) {
-  expressValidator.Validator.prototype.isBetween = function(a, b) {
-    var grade = parseFloat(this.str);
-    if(grade < a || grade > b) {
-      this.error(this.msg);
-      return this;
-    }
-  };
-  expressValidator.Validator.prototype.isName = function() {
-    if (!this.str.match(/^[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя]+$/)) {
-            return this.error(this.msg || 'Invalid characters');
-        }
-        return this;
-  };
-
-  app.post('/application', function(req, res) {
+exports.route = function(app, db) {
+    app.post('/application', function(req, res) {
     console.log(req.body);
 
     req.assert('grade', 'grade is not valid').isBetween(4.5, 6.0);

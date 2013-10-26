@@ -15,6 +15,20 @@ var db = mongojs.connect(databaseURL, collections);
 
 var app = express();
 
+expressValidator.Validator.prototype.isBetween = function(a, b) {
+  var grade = parseFloat(this.str);
+  if(grade < a || grade > b) {
+    this.error(this.msg);
+    return this;
+  }
+};
+expressValidator.Validator.prototype.isName = function() {
+  if (!this.str.match(/^[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя]+$/)) {
+    return this.error(this.msg || 'Invalid characters');
+  }
+  return this;
+};
+
 app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.bodyParser());
@@ -39,10 +53,9 @@ app.configure(function() {
 }));
 });
 
-
 login.route(app, db, passport, LocalStrategy);
-registration.route(app,db);
-application.route(app, db, expressValidator);
+registration.route(app, db);
+application.route(app, db);
 
 app.listen(3000);
 console.log('Listening to port 3000');
