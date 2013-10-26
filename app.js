@@ -29,6 +29,21 @@ expressValidator.Validator.prototype.isName = function() {
   return this;
 };
 
+   expressValidator.Validator.prototype.isEmail = function() {
+    console.log('=======================');
+    if (!this.str.match(/.+@.+\..+/)) {
+        return this.error(this.msg || 'Invalid email');
+    }
+    return this;
+  }
+  expressValidator.Validator.prototype.isFacultyID = function() {
+    console.log('=======================');
+    if (!this.str.match(/[0-9]+/)) {
+        return this.error(this.msg || 'Invalid email');
+    }
+    return this;
+  }
+
 app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.bodyParser());
