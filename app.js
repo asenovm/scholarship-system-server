@@ -101,6 +101,8 @@ registration.route(app, db, hashFunction);
 application.routeCreateApplication(app, db);
 application.routeDeleteApplication(app, db);
 adminApplications.routeGetUnaprovedApplications(app,db);
+application.routeGetApplication(app, db);
+
 app.listen(3000);
 console.log('Listening to port 3000');
 

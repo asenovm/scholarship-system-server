@@ -67,3 +67,17 @@ exports.routeDeleteApplication = function(app, db) {
     });
   });
 };
+
+exports.routeGetApplication = function(app, db) {
+  app.get('/application', function(req, res){
+    db.applications.findOne({email: req.query['email']}, function(err, found) {
+      if(err || !found) {
+        console.log('Application not found');
+        res.send(404);
+      } else {
+        console.log('Application found');
+        res.send(200);
+      }
+    });
+  }); 
+};
