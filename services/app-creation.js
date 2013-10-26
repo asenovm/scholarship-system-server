@@ -8,6 +8,12 @@ exports.route = function(app, db, expressValidator) {
       return this;
     }
   };
+  expressValidator.Validator.prototype.isName = function() {
+    if (!this.str.match(/^[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя]+$/)) {
+            return this.error(this.msg || 'Invalid characters');
+        }
+        return this;
+  };
 
   app.post('/application', function(req, res) {
     console.log(req.body);
@@ -16,16 +22,16 @@ exports.route = function(app, db, expressValidator) {
     req.assert('schoolYear', 'schooYear is not valid').isBetween(1, 4);
     req.assert('firstParentIncome', 'firstParentIncome is invalid').isFloat();
     req.assert('secondParentIncome', 'secondParentIncome is invalid').isFloat();
-    req.assert('firstParentFirstName', 'firstParentFirstName is invalid').isAlpha();
-    req.assert('firstParentSurname', 'firstParentSurname is invalid').isAlpha();
-    req.assert('firstParentLastName', 'fisrtParentLastName is invalid').isAlpha();
-    req.assert('secondParentFirstName', 'secondParentFirstName is invalid').isAlpha();
-    req.assert('secondParentSurname', 'secondParentSurname is invalid').isAlpha();
-    req.assert('secondParentLastName', 'secondParentLastName is invalid').isAlpha();
+    req.assert('firstParentFirstName', 'firstParentFirstName is invalid').isName();
+    req.assert('firstParentSurname', 'firstParentSurname is invalid').isName();
+    req.assert('firstParentLastName', 'fisrtParentLastName is invalid').isName();
+    req.assert('secondParentFirstName', 'secondParentFirstName is invalid').isName();
+    req.assert('secondParentSurname', 'secondParentSurname is invalid').isName();
+    req.assert('secondParentLastName', 'secondParentLastName is invalid').isName();
 
     var errors = req.validationErrors();
     console.log(errors);
-      
+
     if(errors){
       console.log("Validation parameters fail");
       console.log(errors);
@@ -42,7 +48,7 @@ exports.route = function(app, db, expressValidator) {
     console.log(application);
     application.status = 'pending';
     application.timestamp = Date.now();
-    db.applications.findOne({email: application.email}, function(err, dup) {
+    db.applications.findOne({email: application.email, status: 'pending'}, function(err, dup) {
       if(err || dup) {
         console.log("Application not saved");
         res.send(500);
