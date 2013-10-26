@@ -26,24 +26,15 @@ exports.route = function(app, db) {
 
     var user =_.pick(req.body, 'email', 'password', 'firstName', 'surname', 'lastName', 'facultyId', 'facultyName', 'major');
     console.dir(user);
+  db.users.save(user, function(err, saved) {
+    if( err || !saved ) {
+      console.log("User not saved");
+      res.send(500);
+    }
+    else{
 
-    db.users.findOne({email: user.email}, function (err, dup){
-      if (err || dup) {
-        console.log('Register fail: user allready exists');
-        res.send(500);
-      }
-      else {
-        db.users.save(user, function(err, saved) {
-          if( err || !saved ) {
-            console.log('Register fail: DB User not saved');
-            res.send(500);
-          }
-          else{
-            console.log('Register success: DB User saved');
-            res.send(200);    
-          }
-        });
-      }
-    });
+      console.log("User saved");
+      res.send(200);    
+    } 
   });
 }

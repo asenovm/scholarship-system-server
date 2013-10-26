@@ -6,19 +6,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var expressValidator = require('express-validator'); 
 var registration = require('./services/register'); 
 var login = require('./services/login'); 
+var application = require('./services/app-creation');
 
-// expressValidator.Validator.prototype.isEmail = function(email) {
-//   //You could validate against this.str, instead of just erroring out.
-//   console.log('=======================');
-//   console.log('log from isEmail: ' + email);
-//   console.log('log from this: ' + this.email);
-
-//   console.log('=======================');
-//   return this;
-// }
-
+//192.168.0.103
 var databaseURL = 'localhost:27017/scholar-systems';
-var collections = ['users'];
+var collections = ['users', 'applications'];
 var db = mongojs.connect(databaseURL, collections);
 
 var app = express();
@@ -50,7 +42,7 @@ app.configure(function() {
 
 login.route(app, db, passport, LocalStrategy);
 registration.route(app,db);
-
+application.route(app, db, expressValidator);
 
 app.listen(3000);
 console.log('Listening to port 3000');
