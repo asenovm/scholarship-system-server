@@ -1,6 +1,6 @@
 var _ = require('underscore');
 
-exports.route = function(app, db) {
+exports.routeCreateApplication = function(app, db) {
     app.post('/application', function(req, res) {
     console.log(req.body);
 
@@ -49,6 +49,20 @@ exports.route = function(app, db) {
             res.send(200);    
           } 
         });
+      }
+    });
+  });
+};
+
+exports.routeDeleteApplication = function(app, db) {
+  app.del('/application', function(req, res) {
+    db.applications.update({email: req.body['email']}, {'$set': {'status': 'deleted'}}, function(err, updated) {
+      if(err || !updated) {
+        console.log('Application not deleted');
+        res.send(404);
+      } else {
+        console.log('Application deleted');
+        res.send(200);
       }
     });
   });

@@ -96,7 +96,8 @@ app.configure(function() {
 
 login.route(app, db, passport, LocalStrategy, hashFunction);
 registration.route(app, db, hashFunction);
-application.route(app, db);
+application.routeCreateApplication(app, db);
+application.routeDeleteApplication(app, db);
 
 app.listen(3000);
 console.log('Listening to port 3000');
