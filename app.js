@@ -17,7 +17,7 @@ var login = require('./services/login');
 //   return this;
 // }
 
-var databaseURL = '192.168.0.103:27017/scholar-systems';
+var databaseURL = 'localhost:27017/scholar-systems';
 var collections = ['users'];
 var db = mongojs.connect(databaseURL, collections);
 
