@@ -44,14 +44,45 @@ passport.use(new LocalStrategy(
   }
 ));
 
-app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true}), function(req, res) {
-  
+app.post('/login', passport.authenticate('local'), function(req, res) {
+  0
   res.send(req.user);
   
 });
 
-app.get('/register', function(req, res) {
-	res.send('Register page');
+app.post('/register', function(req, res) {
+	var email = req.param('email');
+  var password = req.param('password');
+  var firstName = req.param('firstName');
+  var surname = req.param('surname');
+  var lastName = req.param('lastName');
+  var facultyId = req.param('facultyId');
+  var facultyName = req.param('facultyName');
+  var major = req.param('major');
+
+  user = {
+    'email' : email,
+    'password' : password,
+    'firstName' : firstName,
+    'surname' : surname,
+    'lastName' : lastName,
+    'facultyId' : facultyId,
+    'facultyName' : facultyName,
+    'major' : major
+  };
+
+
+
+  db.users.save(user, function(err, saved) {
+    if( err || !saved ) {
+      console.log("User not saved");
+      res.send(500);
+    }
+    else{
+      res.send(200);    
+      console.log("User saved");
+    } 
+  });
 });
 
 app.listen(3000);
