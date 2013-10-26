@@ -8,6 +8,8 @@ var expressValidator = require('express-validator');
 var registration = require('./services/register'); 
 var login = require('./services/login'); 
 var application = require('./services/app-creation');
+var adminApplications = require('./services/admin/applications');
+
 var hashPassword = '7f2cb012375570';
 
 //192.168.0.103
@@ -98,7 +100,7 @@ login.route(app, db, passport, LocalStrategy, hashFunction);
 registration.route(app, db, hashFunction);
 application.routeCreateApplication(app, db);
 application.routeDeleteApplication(app, db);
-
+adminApplications.routeGetUnaprovedApplications(app,db);
 app.listen(3000);
 console.log('Listening to port 3000');
 
