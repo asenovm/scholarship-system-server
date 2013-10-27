@@ -73,7 +73,7 @@ exports.routeGetApplication = function(app, db) {
     db.applications.findOne({email: req.query['email']}, function(err, found) {
       if(err || !found) {
         console.log('Application not found');
-        res.send(404);
+        res.status(404).send(found);
       } else {
         console.log('Application found');
         res.status(200).send(found);
