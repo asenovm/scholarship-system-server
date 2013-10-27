@@ -1,11 +1,22 @@
 exports.route = function(app, db, passport, LocalStrategy, hashFunction) {
   passport.serializeUser(function(user, done) {
+      console.log('serializeUser');
+      console.log('user');
+      console.dir(user);
+      // console.log('err');
+      // console.dir(err);
+      // done(err, user);
+
     done(null, user._id);
   });
 
   passport.deserializeUser(function(id, done) {
       console.log('deserializeUser');
     User.findById(id, function(err, user) {
+      console.log('user');
+      console.dir(user);
+      console.log('err');
+      console.dir(err);
       done(err, user);
     });
   });
