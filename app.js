@@ -9,12 +9,13 @@ var registration = require('./services/register');
 var login = require('./services/login'); 
 var application = require('./services/app-creation');
 var adminApplications = require('./services/admin/applications');
+var adminSettings = require('./services/admin/settings');
 
 var hashPassword = '7f2cb012375570';
 
 //192.168.0.103
 var databaseURL = 'localhost:27017/scholar-systems';
-var collections = ['users', 'applications'];
+var collections = ['users', 'applications','majors'];
 var db = mongojs.connect(databaseURL, collections);
 
 var app = express();
@@ -26,8 +27,10 @@ var app = express();
 // });
 
 app.use(function (req, res, next) {
-   res.header("Access-Control-Allow-Origin", "*");
-   res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+   res.header("Access-Control-Allow-Origin", "http://localhost:9000");
+   res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept");
+   res.header('Access-Control-Allow-Credentials', true);
+   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
    next();
 });
 
@@ -103,6 +106,8 @@ application.routeDeleteApplication(app, db);
 adminApplications.routeGetUnaprovedApplications(app,db);
 adminApplications.routeAproveApplications(app, db);
 application.routeGetApplication(app, db);
+adminSettings.routeGetMajorsSettings(app, db);
+adminSettings.routeUpdateMajorSettings(app, db);
 
 app.listen(3000);
 console.log('Listening to port 3000');
