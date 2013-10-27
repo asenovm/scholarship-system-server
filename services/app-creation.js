@@ -26,7 +26,7 @@ exports.routeCreateApplication = function(app, db) {
     }
 
     var application = _.pick(req.body,
-      'email', 'grade', 'schoolYear', 'socialScholarship', 'yearlyScholarship',
+      'email', 'major', 'grade', 'schoolYear', 'socialScholarship', 'yearlyScholarship',
       'firstParentFirstName', 'firstParentSurname', 'firstParentLastName',
       'firstParentCompany', 'firstParentIncome',
       'secondParentFirstName', 'secondParentSurname', 'secondParentLastName',
@@ -34,23 +34,36 @@ exports.routeCreateApplication = function(app, db) {
     console.log(application);
     application.status = 'pending';
     application.timestamp = Date.now();
-    db.applications.findOne({email: application.email, status: 'pending'}, function(err, dup) {
-      if(err || dup) {
-        console.log("Application not saved");
+    var deadline = 0;
+
+    
+    db.majors.findOne({major: application.major}, function(err, major) {
+      if(err || !major) {
+        console.log("Application not saved: cannot find major");
         res.send(500);
       } else {
-        db.applications.save(application, function(err, saved) {
-          if( err || !saved ) {
-            console.log("Application not saved");
+        deadline = major.deadline;
+        db.applications.findOne({email: application.email, status: {'$ne' : 'deleted'} }, function(err, dup) {
+          if(err || dup || (application.timestamp < deadline)) {   
+            console.log("Application not saved: application exists or deadline");
             res.send(500);
+          } else {
+            db.applications.save(application, function(err, saved) {
+              if( err || !saved ) {
+                console.log("Application not saved");
+                res.send(500);
+              }
+              else{
+                console.log("Application saved");
+                res.send(200);    
+              } 
+             });
           }
-          else{
-            console.log("Application saved");
-            res.send(200);    
-          } 
         });
       }
     });
+
+    
   });
 };
 
@@ -73,7 +86,7 @@ exports.routeGetApplication = function(app, db) {
     db.applications.findOne({email: req.query['email']}, function(err, found) {
       if(err || !found) {
         console.log('Application not found');
-        res.status(404).send([]);
+        res.status(200).send([]);
       } else {
         console.log('Application found');
         res.status(200).send([found]);
