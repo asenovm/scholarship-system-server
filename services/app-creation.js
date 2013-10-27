@@ -36,15 +36,19 @@ exports.routeCreateApplication = function(app, db) {
     application.timestamp = Date.now();
     var deadline = 0;
 
-    
+    console.log(application.major);
     db.majors.findOne({major: application.major}, function(err, major) {
       if(err || !major) {
         console.log("Application not saved: cannot find major");
         res.send(500);
       } else {
-        deadline = major.deadline;
+        //console.log(major.deadLine);
+        deadline = major.deadLine;
+        //console.log((application.timestamp));
+        //console.log((deadline));
+        //console.log((application.timestamp > deadline));
         db.applications.findOne({email: application.email, status: {'$ne' : 'deleted'} }, function(err, dup) {
-          if(err || dup || (application.timestamp < deadline)) {   
+          if(err || dup || (application.timestamp > deadline)) {   
             console.log("Application not saved: application exists or deadline not met");
             res.send(500);
           } else {
