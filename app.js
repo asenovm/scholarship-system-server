@@ -66,7 +66,7 @@ expressValidator.Validator.prototype.isName = function() {
   }
   expressValidator.Validator.prototype.validatePassword = function() {
     console.log('=======================');
-    if (this.str.length > 7 || !this.str.search(/[A-Z]/) || !this.str.search(/[0-9]/)) {
+    if (this.str.length < 8 || this.str.search(/[A-Z]/) === -1 || this.str.search(/\d/) === -1) {
         return this.error(this.msg || 'Invalid password');
     }
     return this;
@@ -101,6 +101,7 @@ registration.route(app, db, hashFunction);
 application.routeCreateApplication(app, db);
 application.routeDeleteApplication(app, db);
 adminApplications.routeGetUnaprovedApplications(app,db);
+adminApplications.routeAproveApplications(app, db);
 application.routeGetApplication(app, db);
 
 app.listen(3000);

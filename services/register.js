@@ -37,15 +37,13 @@ exports.route = function(app, db, hashFunction) {
 
 function validate (req) {
 
-    req.assert('email', 'A email is required').notEmpty();
     req.assert('email', 'A valid email is required').isEmail();
-    req.assert('password', 'password is required').notEmpty();
+    req.assert('password', 'password is required').validatePassword();
 
     validateName('firstName', req);
     validateName('surname',req);
     validateName('lastName', req);
 
-    req.assert('facultyId', 'facultyId is required').notEmpty();
     req.assert('facultyId', 'facultyId is required').isFacultyID();
     req.assert('facultyName', 'facultyName is required').notEmpty();
     req.assert('major', 'major is required').notEmpty();
@@ -60,6 +58,5 @@ function validate (req) {
 };
 
 function validateName(name, req) {
-    req.assert(name, name + ' is required').notEmpty();
     req.assert(name, 'A valid '+ name + ' is required').isName();
 }
