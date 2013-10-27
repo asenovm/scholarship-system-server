@@ -68,9 +68,14 @@ exports.routeCreateApplication = function(app, db) {
 };
 
 exports.routeDeleteApplication = function(app, db) {
-  app.del('/application', function(req, res) {
-    db.applications.update({email: req.body['email']}, {'$set': {'status': 'deleted'}}, function(err, updated) {
+  app.del('/application/:email', function(req, res) {
+    db.applications.update({email: req.params['email'], 'status' :{'$ne' :'deleted'}}, {'$set': {'status': 'deleted'}}, function(err, updated) {
       if(err || !updated) {
+        console.dir(err);
+        console.dir(req.body);
+        console.dir(req.params);
+        console.dir(updated);
+        console.log(req.body.email);
         console.log('Application not deleted');
         res.send(404);
       } else {
@@ -83,7 +88,7 @@ exports.routeDeleteApplication = function(app, db) {
 
 exports.routeGetApplication = function(app, db) {
   app.get('/application', function(req, res){
-    db.applications.findOne({email: req.query['email']}, function(err, found) {
+    db.applications.findOne({email: req.query['email'], 'status' :{'$ne' :'deleted'}}, function(err, found) {
       if(err || !found) {
         console.log('Application not found');
         res.status(200).send([]);

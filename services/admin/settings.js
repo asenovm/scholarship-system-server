@@ -45,8 +45,6 @@ exports.routeUpdateMajorSettings = function (app, db) {
 				console.dir(dup);
 				if(dup) {
 					db.majors.update(selection, {'$set': modification}, true, function (err, docs) {
-				console.dir(err);
-				console.dir(docs);
 						if (!err) {
 							if(docs){
 								res.status(200).send(docs);		

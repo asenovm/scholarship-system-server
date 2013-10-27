@@ -10,6 +10,8 @@ var login = require('./services/login');
 var application = require('./services/app-creation');
 var adminApplications = require('./services/admin/applications');
 var adminSettings = require('./services/admin/settings');
+var ranking = require('./events/ranking');
+
 
 var hashPassword = '7f2cb012375570';
 
@@ -108,6 +110,7 @@ adminApplications.routeAproveApplications(app, db);
 application.routeGetApplication(app, db);
 adminSettings.routeGetMajorsSettings(app, db);
 adminSettings.routeUpdateMajorSettings(app, db);
+ranking.createRankingOfStudents(app, db);
 
 app.listen(3000);
 console.log('Listening to port 3000');

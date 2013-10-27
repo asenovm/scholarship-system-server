@@ -1,14 +1,36 @@
+var _ = require('underscore');
+
 exports.routeGetUnaprovedApplications = function (app, db) {
 	app.get('/admin/applications', function(req, res) {
-		db.applications.find({'status':'pending'}, function (err, docs) {
-			if (!err) {
-				if(docs){
-					res.status(200).send(docs);		
+		db.applications.find({'status':'pending'}, function (appErr, appDocs) {
+			if (!appErr) {
+				if(appDocs){
+					db.users.find({}, function (userErr, userDocs) {
+						if (!userErr) {
+							if(userDocs){
+								var result = [];
+								for(var i = 0; i < userDocs.length; i++) {
+									for (var j = appDocs.length - 1; j >= 0; j--) {
+										if(userDocs[i].email === appDocs[j].email){
+											result.push(_.extend(userDocs[i],appDocs[j]));
+										}
+									};
+								};
+								res.status(200).send(result);
+							} else {
+								console.log('Error feching Unaproved Applications: USersDocs');
+								res.send(500);
+							}
+						} else {
+							console.log('Error feching Unaproved Applications: USersERR');
+							res.send(500);
+						}});
 				} else {
-					res.send(200);
+					console.log('Error feching Unaproved Applications: appDocs');
+					res.send(500);
 				}
 			} else {
-				console.log('Error feching Unaproved Applications');
+				console.log('Error feching Unaproved Applications appErr');
 				res.send(500);
 			};
 		});
