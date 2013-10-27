@@ -11,7 +11,6 @@ exports.route = function(app, db, passport, LocalStrategy, hashFunction) {
 
   passport.use(new LocalStrategy(
 	  function(username, password, done) {
-      console.log(password);
       password = hashFunction(password);
       db.users.findOne({email: username, password: password}, function(err, user) {
         if(err) {

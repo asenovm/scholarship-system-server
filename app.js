@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
 });
 
 function hashFunction(password) {
-  console.log('hashFunction(): ' + password);
+  console.log('hashFunction()');
   return crypto_core.enc.Hex.stringify(crypto(password+hashPassword));
 };
 
