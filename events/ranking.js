@@ -63,5 +63,5 @@ exports.createRankingOfStudents = function (app, db) {
 				});
 			}
     	});
-	}, 2000); //21600000
+	}, 32000); //21600000
 };
