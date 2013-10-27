@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var mailer = require('../mailer');
 
 exports.routeGetUnaprovedApplications = function (app, db) {
 	app.get('/admin/applications', function(req, res) {
@@ -44,6 +45,7 @@ exports.routeAproveApplications = function (app, db) {
 			if (!err) {
 				if(docs){
 					res.status(200).send(docs);		
+					mailer.sendMail(req.body.email);
 				} else {
 					res.send(200);
 				}
