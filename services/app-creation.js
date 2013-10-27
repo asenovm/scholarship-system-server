@@ -45,7 +45,7 @@ exports.routeCreateApplication = function(app, db) {
         deadline = major.deadline;
         db.applications.findOne({email: application.email, status: {'$ne' : 'deleted'} }, function(err, dup) {
           if(err || dup || (application.timestamp < deadline)) {   
-            console.log("Application not saved: application exists or deadline");
+            console.log("Application not saved: application exists or deadline not met");
             res.send(500);
           } else {
             db.applications.save(application, function(err, saved) {
