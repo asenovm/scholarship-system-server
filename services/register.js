@@ -12,14 +12,15 @@ exports.route = function(app, db, hashFunction) {
     }    
 
     var user =_.pick(req.body, 'email', 'password', 'firstName', 'surname', 'lastName', 'facultyId', 'facultyName', 'major');
-    console.dir(user);
+    // console.dir(user);
 
-    db.users.findOne({email:user.email}, function(err,dup) {
+    db.users.findOne({email:user.email, 'typeUser' : 'student' }, function(err,dup) {
       if(err || dup) {
               console.log("User not saved, already exists");
               res.send(500);
       } else {
           user.password = hashFunction(user.password);
+          user.typeUser = 'student';
           db.users.save(user, function(err, saved) {
             if( err || !saved ) {
               console.log("User not saved");
