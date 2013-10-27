@@ -76,7 +76,7 @@ exports.routeGetApplication = function(app, db) {
         res.send(404);
       } else {
         console.log('Application found');
-        res.send(found);
+        res.status(200).send(found);
       }
     });
   }); 

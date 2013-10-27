@@ -26,6 +26,6 @@ exports.route = function(app, db, passport, LocalStrategy, hashFunction) {
   ));
 
   app.post('/login', passport.authenticate('local'), function(req, res) {
-    res.send(req.user);
+    res.status(200).send(req.user);
   });
 };
